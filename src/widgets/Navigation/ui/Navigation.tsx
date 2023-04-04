@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { routes } from '../../../routes';
 
 interface INavigation {
-  handleDrawerClose: () => void;
+  handleDrawerClose: (state: boolean) => void;
   isSidebarOpened: boolean;
 }
 
-const drawerWidth = 240;
+const drawerWidth = 340;
+
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -70,35 +75,60 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Navigation({ isSidebarOpened, handleDrawerClose }: INavigation) {
   const theme = useTheme();
+  const [expandedIndex, setExpandedIndex] = useState<number>(-1);
+
+  const handleExpand = (index: number) => {
+    handleDrawerClose(true)
+    setExpandedIndex(expandedIndex === index && isSidebarOpened ? -1 : index);
+  };
 
   return (
     <Drawer variant="permanent" open={isSidebarOpened}>
       <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton onClick={() => handleDrawerClose(false)}>
           {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </DrawerHeader>
       <Divider />
       <List>
-        {['Журналы', 'Орнанизация', 'Документация', 'Отходы', 'Система', 'Отчеты'].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+        {routes.map(
+          (item, index) => (
+            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: isSidebarOpened ? 'initial' : 'center',
                   px: 2.5
-                }}>
+                }}
+                onClick={() => handleExpand(index)}
+              >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
                     mr: isSidebarOpened ? 3 : 'auto',
                     justifyContent: 'center'
                   }}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {item.icon}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: isSidebarOpened ? 1 : 0 }} />
+                <ListItemText primary={item.label} sx={{ opacity: isSidebarOpened ? 1 : 0 }} />
+                {item.children && isSidebarOpened && ( expandedIndex === index ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
               </ListItemButton>
+              {item.children && (
+                <Collapse in={expandedIndex === index} timeout="auto">
+                  <List component="div" disablePadding >
+                    {item.children.map((subitem, subindex) => (
+                      <ListItemButton
+                        key={subindex}
+                        component={Link}
+                        to={subitem.path}
+                        sx={{ pl: 9 }}
+                      >
+                        <ListItemText primary={subitem.label} />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              )}
             </ListItem>
           )
         )}

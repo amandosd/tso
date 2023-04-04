@@ -4,8 +4,8 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
+import Header from '../widgets/Header/ui/Header';
+import Navigation from '../widgets/Navigation/ui/Navigation';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -19,8 +19,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Layout() {
   const [isSidebarOpened, setIsSidebarOpened] = React.useState(false);
 
-  const handleDrawerShow = () => {
-    setIsSidebarOpened((prev) => !prev);
+  const handleDrawerShow = (state: boolean) => {
+    setIsSidebarOpened(state);
   };
 
   return (

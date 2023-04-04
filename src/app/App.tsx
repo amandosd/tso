@@ -1,23 +1,38 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Layout from '../shared/ui/Layout/Layout';
+
+import { routes } from '../routes';
+import Layout from './Layout';
+import ErrorPage from '../pages/Error/Error';
+import NotFoundPage from '../pages/NotFount/NotFount';
 
 const theme = createTheme({
   palette: {}
 });
 
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <Layout />,
+      children: routes,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '*',
+      element: <NotFoundPage />,
+    },
+  ],
+  { basename: '/' }
+)
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<h2>Test</h2>} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+          <RouterProvider router={router} />
       </div>
     </ThemeProvider>
   );

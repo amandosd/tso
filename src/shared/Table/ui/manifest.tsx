@@ -1,0 +1,32 @@
+export interface ManifestResponse { 
+    id: number; 
+    isVerified: boolean; 
+    created: string; 
+    createdDate: string; 
+    waste: string; 
+    mass: number | null; 
+    volume: number | null; 
+    wasteGenerator: string; 
+    source: string; 
+    facilityObject: string; 
+    placeOfStoring: string; 
+    operation: string; 
+    status: string; 
+    statusId: number; 
+    vehicleRegistration: string; 
+    wastePlacedUser: string; 
+    facilityOperator: string; 
+    colorClass: string; 
+    colorClassCode: number | null; 
+    comment: string; 
+    transporter: string; 
+    wasteMass: number | null; 
+    transportEmptyMass: number | null; 
+    costCenter: string; 
+    descriptionOfWork: string; 
+    isLongTermManifest: boolean; 
+    hasLongTermManifestValues: boolean; 
+    x: number | null; 
+    y: number | null; 
+    storingDateTime: string | null; 
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -13,9 +14,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import TranslateIcon from '@mui/icons-material/Translate';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import LogoImage from '../images/logo.png';
 
 interface IHeader {
-  handleDrawerOpen: () => void;
+  handleDrawerOpen: (state: boolean) => void;
   isSidebarOpened: boolean;
 }
 
@@ -23,7 +25,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const languages = ['Russian (русский)', 'English'];
 
@@ -62,42 +64,31 @@ export default function Header({ isSidebarOpened, handleDrawerOpen }: IHeader) {
         <IconButton
           color="inherit"
           aria-label="open drawer"
-          onClick={handleDrawerOpen}
           edge="start"
           sx={{
             marginRight: 5,
             ...(isSidebarOpened && { display: 'none' })
-          }}>
+          }}
+          onClick={() => handleDrawerOpen(true)}
+        >
           <MenuIcon />
         </IconButton>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none'
-            }}>
-            LOGO
-          </Typography>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              color: 'inherit',
-              textDecoration: 'none'
-            }}>
-            ОП/БиОТ Управление Отходами
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center'}}>
+            <Avatar src={LogoImage} />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                ml: 4,
+                color: 'inherit',
+                textDecoration: 'none'
+              }}>
+              ОП/БиОТ Управление Отходами
+            </Typography>
+          </Box>
         </Box>
 
         <Box sx={{ flexGrow: 0, alignItems: 'center', alignContent: 'center' }}>
@@ -110,7 +101,7 @@ export default function Header({ isSidebarOpened, handleDrawerOpen }: IHeader) {
               textDecoration: 'none'
             }}>
             <PersonIcon sx={{ verticalAlign: 'middle' }} />
-            Amandos, Daulet [Norsec Delta Projects LLP] (Daulet.Amandos@tengizchevroil.com)
+            Amandos, Daulet
           </Typography>
           <Button
             id="basic-button"
